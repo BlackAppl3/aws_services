@@ -1,3 +1,36 @@
+<% if @user_info.present? %>
+  UserName - <%= @user_info[:username] %>
+  Email - <%= @user_info[:user_attributes].select {|data| data[:name] == "email"}.first.value %>
+<% end %>
+
+<br/> <br/>
+
+Signup:
+
+<%= simple_form_for(:dummy, url: signup_congito_path) do |f| %>
+  <%= f.input :username, required: true, :label => false, :input_html => {placeholder: "UserName"} %>
+  <%= f.input :email, required: true, :label => false, :input_html => {placeholder: "Email"} %>
+  <%= f.input :password, required: true, :label => false, :input_html => {placeholder: "Password"} %>
+  <%= f.button :submit, "Submit" %>
+<% end %>
+
+<br/> <br/>
+
+
+Login:
+
+<%= simple_form_for(:dummy, url: login_cognito_path) do |f| %>
+  <%= f.input :username, required: true, :label => false, :input_html => {placeholder: "UserName"} %>
+  <%= f.input :password, required: true, :label => false, :input_html => {placeholder: "Password"} %>
+  <%= f.button :submit, "Submit" %>
+<% end %>
+
+
+<br/> <br/>
+
+Input Format - {"Message": "GokulPS"}
+<br/><br/>
+
 <%= simple_form_for(:dummy, url: send_payload_to_sns_path) do |f| %>
    <%= f.input :message, required: true, autofocus: true, :label => false, :input_html => {placeholder: "Add payload"} %>
   <%= f.button :submit, "Submit" %>
