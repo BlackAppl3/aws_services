@@ -1,0 +1,4 @@
+<%= simple_form_for(:dummy, url: send_payload_to_sns_path) do |f| %>
+   <%= f.input :message, required: true, autofocus: true, :label => false, :input_html => {placeholder: "Add payload"} %>
+  <%= f.button :submit, "Submit" %>
+<% end %>

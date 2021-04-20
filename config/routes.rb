@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   root 'services#index'
   resources :services
   post "receive_sns" => "services#receive_sns"
+  get "generate_payload" => "services#generate_payload"
+  post "send_payload_to_sns" => "services#send_payload_to_sns"
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'

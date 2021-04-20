@@ -27,6 +27,10 @@ gem "httparty"
 
 gem 'aws-sdk'
 
+gem 'simple_form'
+
+gem "figaro"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
