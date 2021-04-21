@@ -28,9 +28,13 @@ class ServicesController < ApplicationController
         access_key_id: Figaro.env.AWS_ACCESS_KEY,
         secret_access_key: Figaro.env.AWS_SECRET_KEY
     )
+    begin
     @user_info = client.get_user({
                                access_token: session[:access_token]
-                           }) if session[:access_token].present?
+                           })
+    rescue StandardError => e
+
+    end
   end
 
   def send_payload_to_sns
@@ -39,15 +43,26 @@ class ServicesController < ApplicationController
         credentials: Aws::Credentials.new(Figaro.env.AWS_ACCESS_KEY, Figaro.env.AWS_SECRET_KEY)
     )
     begin
-      cognito_client = Aws::CognitoIdentityProvider::Client.new(
-          region: "us-east-1",
-          access_key_id: Figaro.env.AWS_ACCESS_KEY,
-          secret_access_key: Figaro.env.AWS_SECRET_KEY
-      )
+      #cognito_client = Aws::CognitoIdentityProvider::Client.new(
+      #    region: "us-east-1",
+      #    access_key_id: Figaro.env.AWS_ACCESS_KEY,
+      #    secret_access_key: Figaro.env.AWS_SECRET_KEY
+      #)
+      #
+      #cognito_client.get_user({
+      #                            access_token: session[:access_token]
+      #                        })
 
-      cognito_client.get_user({
-                                  access_token: session[:access_token]
-                              })
+      headers = {
+          "Authorization" => session[:identity_token],
+          "Content-Type" => "application/json"
+      }
+
+      response = HTTParty.get("https://j5ftmdzhsa.execute-api.us-east-1.amazonaws.com/DummyStage/", :headers => headers)
+
+      unless response.code == 200 and response["success"] == "true"
+        redirect_to root_path, :flash => { error: 'You are not authenticated to send payload' } and return
+      end
 
     rescue StandardError => e
       redirect_to root_path, :flash => { error: 'You are not authenticated to send payload' } and return
@@ -100,6 +115,22 @@ class ServicesController < ApplicationController
                   }
               })
     session[:access_token] = response.to_hash[:authentication_result][:access_token]
+    session[:identity_token] = response.authentication_result.id_token
+    redirect_to generate_payload_path
+  end
+
+  def signout_cognito
+    client = Aws::CognitoIdentityProvider::Client.new(
+        region: "us-east-1",
+        access_key_id: Figaro.env.AWS_ACCESS_KEY,
+        secret_access_key: Figaro.env.AWS_SECRET_KEY
+    )
+
+    client.global_sign_out({
+                               access_token: session[:access_token]
+                           })
+    session.delete(:access_token)
+    session.delete(:identity_token)
     redirect_to generate_payload_path
   end
 end

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   post "send_payload_to_sns" => "services#send_payload_to_sns"
   post "signup_congito" => "services#sign_up_cognito_user"
   post "login_cognito" => "services#login_cognito_user"
+  post "signout_cognito" => "services#signout_cognito"
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'

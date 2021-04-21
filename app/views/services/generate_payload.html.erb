@@ -1,6 +1,7 @@
 <% if @user_info.present? %>
   UserName - <%= @user_info[:username] %>
   Email - <%= @user_info[:user_attributes].select {|data| data[:name] == "email"}.first.value %>
+  <%= link_to "SignOut", signout_cognito_path, :class => "button", :method =>  "post" %>
 <% end %>
 
 <br/> <br/>
