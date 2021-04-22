@@ -1144,6 +1144,7 @@ GEM
     multi_xml (0.6.0)
     nokogiri (1.11.3)
       racc (~> 1.4)
+    paho-mqtt (1.0.12)
     racc (1.5.2)
     rack (1.6.13)
     rack-test (0.7.0)
@@ -1229,6 +1230,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 2.0)
   jquery-rails
+  paho-mqtt
   rails (= 4.2.10)
   sass-rails (~> 5.0)
   sdoc (>= 0.4.0)
