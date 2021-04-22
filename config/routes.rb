@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   post "signup_congito" => "services#sign_up_cognito_user"
   post "login_cognito" => "services#login_cognito_user"
   post "signout_cognito" => "services#signout_cognito"
+  post "update_shadow" => "services#update_shadow"
+  get "retrieve_shadow_state" => "services#retrieve_shadow_state"
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'

@@ -133,4 +133,19 @@ class ServicesController < ApplicationController
     session.delete(:identity_token)
     redirect_to generate_payload_path
   end
+
+  def retrieve_shadow_state
+    iot_obj = Aws::IoT::Client.new(region: "us-east-1")
+    endpoint = "#{iot_obj.config.endpoint.scheme}://#{iot_obj.describe_endpoint().endpoint_address}"
+
+    iotdataplane_obj = Aws::IoTDataPlane::Client.new(
+        region: "us-east-1",
+        credentials: Aws::Credentials.new(Figaro.env.AWS_ACCESS_KEY, Figaro.env.AWS_SECRET_KEY),
+        endpoint: endpoint,
+        ssl_verify_peer: false
+    )
+
+    response = iotdataplane_obj.get_thing_shadow({thing_name: "DummyThing"})
+    @shadow_state = JSON(response.payload.to_json).first
+  end
 end
